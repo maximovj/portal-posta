@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('author')->nullable()->default('na');
             $table->string('profession')->nullable()->default('na');
             $table->string('title')->nullable()->default('na');
-            $table->string('subtile')->nullable()->default('na');
+            $table->string('subtitle')->nullable()->default('na');
             $table->string('slug')->unique()->nullable();
             $table->longText('summary')->nullable(); // Es para búsquedas (SEO)
             $table->longText('header')->nullable(); // Es para introducción

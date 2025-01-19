@@ -23,7 +23,7 @@ class Article extends Model
         'author',
         'profession',
         'title',
-        'subtile',
+        'subtitle',
         'slug',
         'summary',
         'header',
