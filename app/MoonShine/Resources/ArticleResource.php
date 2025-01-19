@@ -79,7 +79,7 @@ class ArticleResource extends ModelResource
             Box::make([
                 ID::make(),
                 Tabs::make([
-                    Tab::make('Campos para CEO',[
+                    Tab::make('Información del artículo (SEO)',[
                         Grid::make([
                             Column::make([
                                 Image::make('Portada','cover')
@@ -87,6 +87,7 @@ class ArticleResource extends ModelResource
                                     ->dir('posts')
                                     ->allowedExtensions(['jpg', 'png', 'jpeg']),
                                 Text::make('Titulo', 'title')
+                                    ->placeholder('Escribe el titulo del artículo')
                                     ->reactive(function(Fields $fields, ?string $value): Fields {
                                         return tap($fields, static fn ($fields) => $fields
                                             ->findByColumn('slug')
@@ -95,6 +96,8 @@ class ArticleResource extends ModelResource
                                     })
                                     ->required(),
                                 Slug::make('URL de Entrada','slug')
+                                    ->placeholder('Escribe un URL amigable para el artículo')
+                                    ->hint('Este será el acceso al artículo')
                                     ->unique()
                                     ->separator('-')
                                     ->from('title')
@@ -106,8 +109,10 @@ class ArticleResource extends ModelResource
                                     ->locked()
                                     ->required(),
                                 Text::make('Subtitulo', 'subtitle')
+                                ->placeholder('Escribe el sub-titulo del artículo')
                                     ->required(),
                                 Textarea::make('Descripción para búsqueda (SEO)','summary')
+                                    ->hint('Este se usará para las buscadores del artículo')
                                     ->required(),
                             ],
                             colSpan: 6,
@@ -123,33 +128,40 @@ class ArticleResource extends ModelResource
                                     ->withImage('avatar', 'public', 'moonshine_users')
                                     ->default(MoonshineUser::find(auth()->id()))
                                     ->disabled(),
-                                Text::make('Nombre del autor', 'author')->required(),
-                                Text::make('Profesión del autor', 'profession')->required(),
+                                Text::make('Nombre del autor', 'author')
+                                    ->placeholder('Escribe el nombre del autor')
+                                    ->required(),
+                                Text::make('Profesión del autor', 'profession')
+                                    ->placeholder('Escribe la profesión del autor')
+                                    ->required(),
                                 Text::make('Etiquetas', 'tags')
+                                    ->hint('Agrega etiquetas para mejorar el resultado de búsquedas')
                                     ->tags(5),
                                 Date::make('Fecha de publicación','published_at')
+                                    ->hint('NOTA: Presiona el icono calendario para poder agregar la fecha')
                                     ->withTime()
                                     ->format('Y-m-d')
                                     ->default(Carbon::now()->addDays(15)->format(''))
                                     ->required(),
                                 Json::make('Redes sociales', 'network_social')
-                                ->fields([
-                                    Text::make('Title'),
-                                    Text::make('Value'),
-                                    Switcher::make('Active'),
-                                ])
-                                ->default([
-                                    [
-                                        'title' => 'Twitter',
-                                        'value' => '@username',
-                                        'active' => true
-                                    ],
-                                    [
-                                        'title' => 'LinkedIn',
-                                        'value' => 'username',
-                                        'active' => true
-                                    ]
-                                ]),
+                                    ->hint('NOTA: Presiona el icono del candado para poder editar los campos')
+                                    ->fields([
+                                        Text::make('Title')->locked(),
+                                        Text::make('Value')->locked(),
+                                        Switcher::make('Active'),
+                                    ])
+                                    ->default([
+                                        [
+                                            'title' => 'Twitter',
+                                            'value' => '@username',
+                                            'active' => true
+                                        ],
+                                        [
+                                            'title' => 'LinkedIn',
+                                            'value' => 'username',
+                                            'active' => true
+                                        ]
+                                    ]),
                                 Switcher::make('Publish', 'is_publish'),
                             ],
                             colSpan: 6,
@@ -157,13 +169,19 @@ class ArticleResource extends ModelResource
                         ]),
                     ]),
                     Tab::make('Introducción',[
-                        TinyMce::make('Introducción','header')->required(),
+                        TinyMce::make('Introducción','header')
+                            ->hint('NOTA: Todo el texto será convertido a HTML')
+                            ->required(),
                     ]),
                     Tab::make('Contenido',[
-                        TinyMce::make('Contenido','content')->required(),
+                        TinyMce::make('Contenido','content')
+                            ->hint('NOTA: Todo el texto será convertido a HTML')
+                            ->required(),
                     ]),
-                    Tab::make('Conclusion',[
-                        TinyMce::make('Conclusion','footer')->required(),
+                    Tab::make('Conclusión',[
+                        TinyMce::make('Conclusion','footer')
+                            ->hint('NOTA: Todo el texto será convertido a HTML')
+                            ->required(),
                     ]),
                 ])
             ])
