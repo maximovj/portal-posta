@@ -66,7 +66,7 @@ class ArticleResource extends ModelResource
             Slug::make('URL de Entrada','slug'),
             Text::make('Nombre del autor', 'author'),
             Date::make('Fecha de publicación','published_at'),
-            Switcher::make('Publish', 'is_publish'),
+            Switcher::make('Publicado', 'is_publish'),
         ];
     }
 
@@ -207,7 +207,7 @@ class ArticleResource extends ModelResource
             TinyMce::make('Contenido','content')->required(),
             TinyMce::make('Conclusion','footer')->required(),
             Date::make('Fecha de publicación','published_at'),
-            Switcher::make('Publish', 'is_publish'),
+            Switcher::make('Publicado', 'is_publish'),
         ];
     }
 
