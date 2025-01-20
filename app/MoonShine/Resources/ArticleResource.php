@@ -48,6 +48,10 @@ class ArticleResource extends ModelResource
 
     protected ?PageType $redirectAfterSave = PageType::INDEX;
 
+    protected array $with = ['moonshine_user'];
+
+    protected bool $columnSelection = true;
+
     protected bool $createInModal = false;
 
     protected bool $editInModal = false;
@@ -62,10 +66,10 @@ class ArticleResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Titulo', 'title'),
-            Slug::make('URL de Entrada','slug'),
-            Text::make('Nombre del autor', 'author'),
-            Date::make('Fecha de publicación','published_at'),
+            Text::make('Titulo', 'title')->sortable(),
+            Slug::make('URL de Entrada','slug')->sortable(),
+            Text::make('Nombre del autor', 'author')->sortable(),
+            Date::make('Fecha de publicación','published_at')->sortable(),
             Switcher::make('Publicado', 'is_publish'),
         ];
     }
@@ -230,4 +234,33 @@ class ArticleResource extends ModelResource
             'published_at' => ['required', 'date'],
         ];
     }
+
+    protected function search(): array
+    {
+        return [
+            'id',
+            'title',
+            'author',
+            'published_at',
+        ];
+    }
+
+    protected function filters(): iterable
+    {
+        return [
+            Text::make('Titulo', 'title'),
+            Text::make('Nombre del autor', 'author'),
+            /*
+            BelongsTo::make(
+                    'Cuenta',
+                    'moonshine_user',
+                    formatted: static fn (MoonshineUser $model) => $model->name,
+                    resource: MoonShineUserResource::class,
+                )->valuesQuery(static fn (Builder $q) => $q->select(['id', 'name'])),
+            */
+            Date::make('Fecha de publicación','published_at'),
+            Switcher::make('Publicado', 'is_publish'),
+        ];
+    }
+
 }
