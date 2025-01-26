@@ -10,7 +10,8 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "moonshine/moonshine": "^3.3",
-        "moonshine/tinymce": "^1.0"
+        "moonshine/tinymce": "^1.0",
+        "twbs/bootstrap": "5.1.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
