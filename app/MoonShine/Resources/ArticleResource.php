@@ -8,7 +8,7 @@ use App\Models\Article;
 use App\Models\Post;
 use App\MoonShine\Resources\MoonShineUserResource;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -58,7 +58,15 @@ class ArticleResource extends ModelResource
 
     protected bool $detailInModal = false;
 
-    
+    protected bool $withPolicy = true;
+
+    protected function modifyQueryBuilder(Builder $builder): Builder
+    {
+        return $builder->whereHas('moonshine_user', function ($query) {
+            $query->where('id', auth()->id());
+        });
+    }
+
     /**
      * @return list<FieldContract>
      */

@@ -31,6 +31,9 @@ use MoonShine\UI\Components\{Breadcrumbs,
     Layout\Wrapper,
     When};
 use App\MoonShine\Resources\ArticleResource;
+use Illuminate\Support\Facades\Auth;
+use MoonShine\Laravel\Models\MoonshineUser;
+use MoonShine\Laravel\MoonShineAuth;
 use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
@@ -44,10 +47,20 @@ final class MoonShineLayout extends AppLayout
 
     protected function menu(): array
     {
-        return [
-            ...parent::menu(),
-            MenuItem::make('Artículos', ArticleResource::class),
-        ];
+        $user_authenticated = auth()->user();
+        $user_authenticated_role = $user_authenticated->moonshineUserRole->name;
+        $menuItems = [];
+
+        // Verificar si el usuario tiene el rol de 'Blogger'
+        if ($user_authenticated && $user_authenticated_role === 'Blogger') {
+            $menuItems[] = MenuItem::make('Artículos', ArticleResource::class);
+        }
+
+        if ($user_authenticated && $user_authenticated_role === 'Admin') {
+            $menuItems[] = parent::menu();
+        }
+
+        return $menuItems;
     }
 
     /**
