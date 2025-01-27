@@ -15,4 +15,3 @@ Route::get('/article/{article}', function (Article $article)
         'article' => $article,
     ]);
 })->name('portal.posta.article');
-

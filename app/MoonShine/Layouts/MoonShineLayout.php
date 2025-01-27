@@ -47,20 +47,25 @@ final class MoonShineLayout extends AppLayout
 
     protected function menu(): array
     {
-        $user_authenticated = auth()->user();
-        $user_authenticated_role = $user_authenticated->moonshineUserRole->name;
-        $menuItems = [];
+        // Verificar si el usuario está autenticado
+        if (moonshine_user()) {
+            // Si el usuario tiene el rol de 'Admin', combinar los menús de la clase padre y 'Artículos'
+            if (moonshine_role_name() === 'Admin') {
+                return [
+                    ...parent::menu(),
+                ];
+            }
 
-        // Verificar si el usuario tiene el rol de 'Blogger'
-        if ($user_authenticated && $user_authenticated_role === 'Blogger') {
-            $menuItems[] = MenuItem::make('Artículos', ArticleResource::class);
+            // Si el usuario tiene el rol de 'Blogger', mostrar solo el menú de 'Artículos'
+            if (moonshine_role_name() === 'Blogger') {
+                return [
+                    MenuItem::make('Artículos', ArticleResource::class),
+                ];
+            }
         }
 
-        if ($user_authenticated && $user_authenticated_role === 'Admin') {
-            $menuItems[] = parent::menu();
-        }
-
-        return $menuItems;
+        // Si el usuario no está autenticado o no tiene un rol válido, devolver un menú vacío
+        return [];
     }
 
     /**

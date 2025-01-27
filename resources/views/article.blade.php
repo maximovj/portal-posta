@@ -50,7 +50,7 @@
                     </ul>
                   </div>
                 </div>
-              </nav>
+            </nav>
             <div class="d-flex justify-content-between align-items-center mt-5">
                 <div>
                     <h1 class="inline fs-3 fw-bold">{!! $article->title ?? ''  !!}</h1>
@@ -87,7 +87,7 @@
         <footer class="shadow-sm p-3 mb-5 bg-body rounded">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <p class="inline-block lead fw-bold">{!! $article->author ?? ''  !!}</p>
+                    <p class="inline-block lead fw-bold">{!! $article->author ?? $article->moonshine_user->name  ?? 'Desconocido' !!}</p>
                     <p style="font-size:14px;">Publicado en: {{ $article->published_at->format('d/m/Y') }}</p>
                     <div>
                         @foreach (explode(',', $article->tags) as $tag)
