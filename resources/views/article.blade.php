@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{!! $article->meta_description ?? 'Resumen del artículo' !!}">
+    <meta name="description" content="{!! $article->summary ?? 'Resumen del artículo' !!}">
     <title>Article</title>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
@@ -56,6 +56,18 @@
                     <h1 class="inline fs-3 fw-bold">{!! $article->title ?? ''  !!}</h1>
                     <h2 class="fs-6">{!! $article->subtitle ?? ''  !!}</h2>
                     <span class="inline-block lead fw-bold fs-6">{!! $article->author ?? ''  !!}</span>
+                    @can('update', $article)
+                        <div class="my-2">
+                            <a 
+                            role="button" 
+                            class="btn btn-danger btn-sm"
+                            href="{{ route('moonshine.resource.page', [
+                                'resourceUri' => 'article-resource',
+                                'pageUri' => 'form-page',
+                                'resourceItem' => $article->id,
+                            ]) }}">Modificar mi artículo</a>
+                        </div>
+                    @endcan
                 </div>
                 <div>
                     <p style="font-size:14px;">Publicado en: {{ $article->published_at->format('d/m/Y') }}</p>
