@@ -11,10 +11,13 @@ class Article extends Model
     /** @use HasFactory<\Database\Factories\ArticleFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'slug';
+
     protected $table = 'articles';
 
     protected $casts = [
-        'network_social' => 'array'
+        'network_social' => 'array',
+        'published_at' => 'datetime',
     ];
 
     protected $fillable = [
