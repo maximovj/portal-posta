@@ -4,37 +4,41 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use App\Models\Article;
-use App\Models\Post;
-use App\MoonShine\Resources\MoonShineUserResource;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Request;
+use App\Models\Post;
+use App\Models\Article;
 use Illuminate\Support\Str;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\Json;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\Image;
 use Illuminate\Validation\Rule;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\Support\AlpineJs;
+use MoonShine\UI\Components\Tabs;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Textarea;
 use MoonShine\Laravel\Fields\Slug;
-use MoonShine\Laravel\Models\MoonshineUser;
-use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\JsEvent;
+use MoonShine\UI\Collections\Fields;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\TinyMce\Fields\TinyMce;
-use MoonShine\UI\Collections\Fields;
-use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Components\Layout\Column;
-use MoonShine\UI\Components\Layout\Grid;
-use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
-use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\Field;
-use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Fields\Image;
-use MoonShine\UI\Fields\Json;
-use MoonShine\UI\Fields\Switcher;
-use MoonShine\UI\Fields\Text;
-use MoonShine\UI\Fields\Textarea;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Grid;
+use Illuminate\Database\Eloquent\Builder;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\Laravel\Models\MoonshineUser;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Laravel\Resources\ModelResource;
+use App\MoonShine\Resources\MoonShineUserResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 
 
 /**
@@ -58,6 +62,21 @@ class ArticleResource extends ModelResource
 
     protected bool $detailInModal = false;
 
+    protected function topButtons(): ListOf
+    {
+        return parent::topButtons()->add(
+            ActionButton::make('Refresh', '#')
+                ->dispatchEvent(AlpineJs::event(JsEvent::TABLE_UPDATED, $this->getListComponentName()))
+        );
+    }
+
+    protected function indexButtons(): ListOf
+    {
+        return parent::indexButtons()->prepend(
+            ActionButton::make('Button 2', url:'/admin/page/article-page')
+                ->showInDropdown(),
+        );
+    }
     
     /**
      * @return list<FieldContract>
