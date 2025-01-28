@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use MoonShine\Laravel\Models\MoonshineUser;
 
@@ -11,10 +12,16 @@ class Article extends Model
     /** @use HasFactory<\Database\Factories\ArticleFactory> */
     use HasFactory;
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     protected $table = 'articles';
 
     protected $casts = [
-        'network_social' => 'array'
+        'network_social' => 'array',
+        'published_at' => 'datetime',
     ];
 
     protected $fillable = [
@@ -38,6 +45,11 @@ class Article extends Model
     public function moonshine_user() 
     {
         return $this->belongsTo(MoonshineUser::class, 'moonshine_user_id', 'id');
+    }
+
+    public function scopeIsPublished(Builder $query)
+    {
+        return $query->where('is_publish', true);
     }
 
 }

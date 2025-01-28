@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources;
 
 use Carbon\Carbon;
-use App\Models\Post;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 use App\Models\Article;
 use Illuminate\Support\Str;
 use MoonShine\UI\Fields\ID;
@@ -62,22 +64,15 @@ class ArticleResource extends ModelResource
 
     protected bool $detailInModal = false;
 
-    protected function topButtons(): ListOf
+    protected bool $withPolicy = true;
+
+    protected function modifyQueryBuilder(Builder $builder): Builder
     {
-        return parent::topButtons()->add(
-            ActionButton::make('Refresh', '#')
-                ->dispatchEvent(AlpineJs::event(JsEvent::TABLE_UPDATED, $this->getListComponentName()))
-        );
+        return $builder->whereHas('moonshine_user', function ($query) {
+            $query->where('id', auth()->id());
+        });
     }
 
-    protected function indexButtons(): ListOf
-    {
-        return parent::indexButtons()->prepend(
-            ActionButton::make('Button 2', url:'/admin/page/article-page')
-                ->showInDropdown(),
-        );
-    }
-    
     /**
      * @return list<FieldContract>
      */
