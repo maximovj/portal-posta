@@ -1,0 +1,134 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+// scss-docs-start theme-color-variables
+$blue: #0d6efd !default;
+$indigo: #6610f2 !default;
+$purple: #6f42c1 !default;
+$pink: #d63384 !default;
+$red: #dc3545 !default;
+$orange: #fd7e14 !default;
+$yellow: #ffc107 !default;
+$green: #198754 !default;
+$teal: #20c997 !default;
+$cyan: #0dcaf0 !default;
+
+$body-color: #757575;
+
+$bg-posta-primary: linear-gradient(to right, #000000, #434343);
+
+$bg-posta-secondary: linear-gradient(to right, #2b5876, #4e4376);
+
+$bg-posta-secondary: linear-gradient(to left, #0f2027, #203a43, #2c5364);
+
+$bg-posta-secondary: linear-gradient(to right, #2c3e50, #34495e);
+
+$bg-posta-secondary: linear-gradient(to right, #1a2a6c, #b21f1f);
+
+
+.bg-navbar-header {
+    background: $bg-posta-primary;
+}
+
+$font-family-base: "Nunito", serif;
+
+// Import Bootstrap's main SASS file
+@import "bootstrap/scss/bootstrap";
+
+// Puedes agregar tus estilos personalizados aquí
+body, .bg-sticky-header {
+    background-color: #f8f9fa;
+}
+
+table {
+    width: 100%;
+    border-radius: 10px !important;
+    border-collapse: separate !important;
+    box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.7);
+    font-family: "Nunito", sans-serif;
+    text-align: center;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+thead th {
+    background-color: #6c757d;
+    color: #000;
+    padding: 12px;
+    text-align: left;
+    font-weight: 700;
+}
+
+tbody td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+tbody tr:hover {
+    background-color: #d6d8db;
+}
+
+tbody tr:first-child {
+    color: #fffa;
+    background: $bg-posta-primary;
+}
+
+img {
+    box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    border: 3px solid transparent;
+    transition: border-color 0.3s ease;
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    background: $bg-posta-secondary;
+    transform: translateY(-10px);
+}
+
+#backToTop {
+    position: fixed; /* Mantiene el botón fijo en la pantalla */
+    bottom: 20px; /* Distancia desde la parte inferior de la pantalla */
+    right: 20px; /* Distancia desde el lado derecho de la pantalla */
+    z-index: 1050; /* Asegura que esté sobre otros elementos */
+    display: none; /* Oculto inicialmente */
+    background: $bg-posta-secondary; /* Color de fondo del botón (Bootstrap Primary) */
+    color: white; /* Color del texto o ícono */
+    border: none; /* Quita el borde del botón */
+    border-radius: 50%; /* Forma redonda */
+    width: 50px; /* Ancho del botón */
+    height: 50px; /* Alto del botón */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+    transition: all 0.3s ease; /* Suaviza las animaciones */
+}
+
+#backToTop:hover {
+    background: $bg-posta-secondary; /* Color de fondo al pasar el mouse */
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño al pasar el mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+}
+
+#backToTop:active {
+    transform: scale(0.95); /* Reduce ligeramente el tamaño al hacer clic */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra más tenue */
+}
+
+p > a {
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 
+      0 0 5px #ff0044, 
+      0 0 10px #ff0044;
+}
