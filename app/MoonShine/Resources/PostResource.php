@@ -5,25 +5,19 @@ declare(strict_types=1);
 namespace App\MoonShine\Resources;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Request;
-use App\Models\Article;
+use App\Models\Post;
 use Illuminate\Support\Str;
 use MoonShine\UI\Fields\ID;
-use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\Json;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Field;
 use MoonShine\UI\Fields\Image;
 use Illuminate\Validation\Rule;
-use MoonShine\Support\AlpineJs;
 use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Textarea;
 use MoonShine\Laravel\Fields\Slug;
-use MoonShine\Support\Enums\JsEvent;
 use MoonShine\UI\Collections\Fields;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\TinyMce\Fields\TinyMce;
@@ -34,7 +28,6 @@ use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Grid;
 use Illuminate\Database\Eloquent\Builder;
 use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Components\Layout\Column;
 use MoonShine\Laravel\Models\MoonshineUser;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -42,21 +35,16 @@ use MoonShine\Laravel\Resources\ModelResource;
 use App\MoonShine\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 
-
 /**
- * @extends ModelResource<Article>
+ * @extends ModelResource<Post>
  */
-class ArticleResource extends ModelResource
+class PostResource extends ModelResource
 {
-    protected string $model = Article::class;
-
-    protected string $title = 'Artículos';
+    protected string $model = Post::class;
 
     protected ?PageType $redirectAfterSave = PageType::INDEX;
 
-    protected array $with = ['moonshine_user'];
-
-    protected bool $columnSelection = true;
+    protected string $title = 'Publicaciones';
 
     protected bool $createInModal = false;
 
@@ -64,15 +52,13 @@ class ArticleResource extends ModelResource
 
     protected bool $detailInModal = false;
 
-    protected bool $withPolicy = true;
+    protected bool $errorsAbove = true;
 
-    protected function modifyQueryBuilder(Builder $builder): Builder
+    public function title(): string
     {
-        return $builder->whereHas('moonshine_user', function ($query) {
-            $query->where('id', auth()->id());
-        });
+        return __('moonshine::ui.resource.book_title', 'Publicaciones');
     }
-
+    
     /**
      * @return list<FieldContract>
      */
@@ -80,11 +66,11 @@ class ArticleResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Titulo', 'title')->sortable(),
-            Slug::make('URL de Entrada','slug')->sortable(),
-            Text::make('Nombre del autor', 'author')->sortable(),
-            Date::make('Fecha de publicación','published_at')->sortable(),
-            Switcher::make('Publicado', 'is_publish'),
+            Text::make('Titulo', 'title'),
+            Slug::make('URL de Entrada','slug'),
+            Text::make('Nombre del autor', 'author'),
+            Date::make('Fecha de publicación','date_published'),
+            Switcher::make('Publish', 'published'),
         ];
     }
 
@@ -97,7 +83,7 @@ class ArticleResource extends ModelResource
             Box::make([
                 ID::make(),
                 Tabs::make([
-                    Tab::make('Información del artículo (SEO)',[
+                    Tab::make('Campos para CEO',[
                         Grid::make([
                             Column::make([
                                 Image::make('Portada','cover')
@@ -105,7 +91,6 @@ class ArticleResource extends ModelResource
                                     ->dir('posts')
                                     ->allowedExtensions(['jpg', 'png', 'jpeg']),
                                 Text::make('Titulo', 'title')
-                                    ->placeholder('Escribe el titulo del artículo')
                                     ->reactive(function(Fields $fields, ?string $value): Fields {
                                         return tap($fields, static fn ($fields) => $fields
                                             ->findByColumn('slug')
@@ -114,8 +99,6 @@ class ArticleResource extends ModelResource
                                     })
                                     ->required(),
                                 Slug::make('URL de Entrada','slug')
-                                    ->placeholder('Escribe un URL amigable para el artículo')
-                                    ->hint('Este será el acceso al artículo')
                                     ->unique()
                                     ->separator('-')
                                     ->from('title')
@@ -126,11 +109,9 @@ class ArticleResource extends ModelResource
                                     })
                                     ->locked()
                                     ->required(),
-                                Text::make('Subtitulo', 'subtitle')
-                                ->placeholder('Escribe el sub-titulo del artículo')
+                                Text::make('Titulo', 'subtitle')
                                     ->required(),
                                 Textarea::make('Descripción para búsqueda (SEO)','summary')
-                                    ->hint('Este se usará para las buscadores del artículo')
                                     ->required(),
                             ],
                             colSpan: 6,
@@ -138,7 +119,7 @@ class ArticleResource extends ModelResource
                             Column::make([
                                 BelongsTo::make(
                                     'Cuenta autor',
-                                    'moonshine_user',
+                                    'user',
                                     fn($item) => "$item->name | $item->email",  
                                     resource: MoonShineUserResource::class)
                                     ->required()    
@@ -146,60 +127,45 @@ class ArticleResource extends ModelResource
                                     ->withImage('avatar', 'public', 'moonshine_users')
                                     ->default(MoonshineUser::find(auth()->id()))
                                     ->disabled(),
-                                Text::make('Nombre del autor', 'author')
-                                    ->placeholder('Escribe el nombre del autor')
-                                    ->required(),
-                                Text::make('Profesión del autor', 'profession')
-                                    ->placeholder('Escribe la profesión del autor')
-                                    ->required(),
+                                Text::make('Nombre del autor', 'author')->required(),
                                 Text::make('Etiquetas', 'tags')
-                                    ->hint('Agrega etiquetas para mejorar el resultado de búsquedas')
                                     ->tags(5),
-                                Date::make('Fecha de publicación','published_at')
-                                    ->hint('NOTA: Presiona el icono calendario para poder agregar la fecha')
-                                    ->withTime()
+                                Date::make('Fecha de publicación','date_published')
                                     ->format('Y-m-d')
                                     ->default(Carbon::now()->addDays(15)->format(''))
                                     ->required(),
                                 Json::make('Redes sociales', 'network_social')
-                                    ->hint('NOTA: Presiona el icono del candado para poder editar los campos')
-                                    ->fields([
-                                        Text::make('Title')->locked(),
-                                        Text::make('Value')->locked(),
-                                        Switcher::make('Active'),
-                                    ])
-                                    ->default([
-                                        [
-                                            'title' => 'Twitter',
-                                            'value' => '@username',
-                                            'active' => true
-                                        ],
-                                        [
-                                            'title' => 'LinkedIn',
-                                            'value' => 'username',
-                                            'active' => true
-                                        ]
-                                    ]),
-                                Switcher::make('Publish', 'is_publish'),
+                                ->fields([
+                                    Text::make('Title'),
+                                    Text::make('Value'),
+                                    Switcher::make('Active'),
+                                ])
+                                ->default([
+                                    [
+                                        'title' => 'Twitter',
+                                        'value' => '@username',
+                                        'active' => true
+                                    ],
+                                    [
+                                        'title' => 'LinkedIn',
+                                        'value' => 'username',
+                                        'active' => true
+                                    ]
+                                ]),
+                                Switcher::make('Publish', 'published'),
                             ],
                             colSpan: 6,
                             adaptiveColSpan: 6),
                         ]),
                     ]),
                     Tab::make('Introducción',[
-                        TinyMce::make('Introducción','header')
-                            ->hint('NOTA: Todo el texto será convertido a HTML')
-                            ->required(),
+                        TinyMce::make('Introducción','header')->required(),
                     ]),
                     Tab::make('Contenido',[
-                        TinyMce::make('Contenido','content')
-                            ->hint('NOTA: Todo el texto será convertido a HTML')
-                            ->required(),
+                        TinyMce::make('Contenido','content')->required(),
                     ]),
-                    Tab::make('Conclusión',[
-                        TinyMce::make('Conclusion','footer')
-                            ->hint('NOTA: Todo el texto será convertido a HTML')
-                            ->required(),
+                    Tab::make('Conclusion',[
+                        TinyMce::make('Conclusion','footer')->required(),
                     ]),
                 ])
             ])
@@ -214,8 +180,6 @@ class ArticleResource extends ModelResource
         return [
             ID::make(),
             Image::make('Portada','cover'),
-            Text::make('Titulo', 'author'),
-            Text::make('Titulo', 'profession'),
             Text::make('Titulo', 'title'),
             Slug::make('URL de Entrada','slug'),
             Text::make('Titulo', 'subtitle'),
@@ -224,13 +188,13 @@ class ArticleResource extends ModelResource
             TinyMce::make('Introducción','header')->required(),
             TinyMce::make('Contenido','content')->required(),
             TinyMce::make('Conclusion','footer')->required(),
-            Date::make('Fecha de publicación','published_at'),
-            Switcher::make('Publicado', 'is_publish'),
+            Date::make('Fecha de publicación','date_published'),
+            Switcher::make('Publish', 'published'),
         ];
     }
 
     /**
-     * @param Article $item
+     * @param Post $item
      *
      * @return array<string, string[]|string>
      * @see https://laravel.com/docs/validation#available-validation-rules
@@ -238,43 +202,12 @@ class ArticleResource extends ModelResource
     protected function rules(mixed $item): array
     {
         return [
-            'author' => ['required', 'string', 'min:5'],
-            'profession' => ['required', 'string', 'min:5'],
             'title' => ['required', 'string', 'min:5'],
             'subtitle' => ['required', 'string', 'min:5'],
             'slug' => ['required', 'string', 'min:5', Rule::unique('posts')->ignore(Request::get('id'))],
             'summary' => ['required', 'string', 'min:5'],
             'content' => ['required', 'string', 'min:5'],
-            'published_at' => ['required', 'date'],
+            'date_published' => ['required', 'date'],
         ];
     }
-
-    protected function search(): array
-    {
-        return [
-            'id',
-            'title',
-            'author',
-            'published_at',
-        ];
-    }
-
-    protected function filters(): iterable
-    {
-        return [
-            Text::make('Titulo', 'title'),
-            Text::make('Nombre del autor', 'author'),
-            /*
-            BelongsTo::make(
-                    'Cuenta',
-                    'moonshine_user',
-                    formatted: static fn (MoonshineUser $model) => $model->name,
-                    resource: MoonShineUserResource::class,
-                )->valuesQuery(static fn (Builder $q) => $q->select(['id', 'name'])),
-            */
-            Date::make('Fecha de publicación','published_at'),
-            Switcher::make('Publicado', 'is_publish'),
-        ];
-    }
-
 }
