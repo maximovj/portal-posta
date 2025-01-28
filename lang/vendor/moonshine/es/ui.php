@@ -83,7 +83,7 @@ return [
         'admins_title' => 'Administradores',
         'role_title' => 'Roles',
         'role_name' => 'Título',
-
+      
         'main_information' => 'Información principal',
         'change_password' => 'Cambiar contraseña',
 
