@@ -23,13 +23,37 @@
             <ul class="navbar-nav ms-3">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Más
+                    @if(moonshine_role_name() === 'Admin')          Admin
+                    @elseif(moonshine_role_name() === 'Blogger')    Blogger
+                    @else                                           Cuenta
+                    @endif
                     </a>
+
+                    @unless(moonshine_user())
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Opción 1</a></li>
-                        <li><a class="dropdown-item" href="#">Opción 2</a></li>
-                        <li><a class="dropdown-item" href="#">Opción 3</a></li>
+                        <li><a class="dropdown-item" target="_blank" rel="alternate" referrerpolicy="origin" href="/admin">Acceder</a></li>
                     </ul>
+                    @else
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" target="_blank" rel="alternate" referrerpolicy="origin" href="/admin">Ver panel</a></li>
+                        @if(moonshine_role_name() === 'Admin')
+                        <li><a class="dropdown-item" target="_blank" rel="alternate" referrerpolicy="origin" href="{{ route('moonshine.resource.page', [
+                            'resourceUri' => 'moon-shine-user-resource',
+                            'pageUri' => 'index-page',
+                        ]) }}">Administrar usuarios</a></li>
+                        <li><a class="dropdown-item" target="_blank" rel="alternate" referrerpolicy="origin" href="{{ route('moonshine.resource.page', [
+                            'resourceUri' => 'moon-shine-user-role-resource',
+                            'pageUri' => 'index-page',
+                        ]) }}">Administrar roles</a></li>
+                        @elseif(moonshine_role_name() === 'Blogger')
+                        <li><a class="dropdown-item" target="_blank" rel="alternate" referrerpolicy="origin" href="{{ route('moonshine.resource.page', [
+                            'resourceUri' => 'article-resource',
+                            'pageUri' => 'index-page',
+                        ]) }}">Administrar artículos</a></li>
+                        <li><a class="dropdown-item" href="#">Administrar comentarios</a></li>
+                        @endif
+                    </ul>
+                    @endunless
                 </li>
             </ul>
         </div>
