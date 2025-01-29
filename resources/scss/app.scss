@@ -25,9 +25,16 @@ $bg-posta-secondary: linear-gradient(to right, #2c3e50, #34495e);
 
 $bg-posta-secondary: linear-gradient(to right, #1a2a6c, #b21f1f);
 
-
 .bg-navbar-header {
     background: $bg-posta-primary;
+}
+
+.article-header {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    //margin: 20px 0px;
 }
 
 $font-family-base: "Nunito", serif;
@@ -36,7 +43,8 @@ $font-family-base: "Nunito", serif;
 @import "bootstrap/scss/bootstrap";
 
 // Puedes agregar tus estilos personalizados aquí
-body, .bg-sticky-header {
+body,
+.bg-sticky-header {
     background-color: #f8f9fa;
 }
 
@@ -128,7 +136,63 @@ img:hover {
 p > a {
     font-weight: bold;
     color: #fff;
-    text-shadow: 
-      0 0 5px #ff0044, 
-      0 0 10px #ff0044;
+    text-shadow: 0 0 5px #ff0044, 0 0 10px #ff0044;
+}
+
+#stickyHeader {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    transform: translateY(0); /* Visible por defecto */
+    opacity: 1; /* Visible por defecto */
+    visibility: visible;
+}
+
+#stickyHeader.hidden {
+    visibility: hidden; /* Oculto después de la animación */
+    pointer-events: none; /* Deshabilitar interacciones */
+}
+
+#stickyHeader.slide-down {
+    transform: translateY(0); /* Deslizar hacia abajo */
+    opacity: 1;
+    visibility: visible;
+}
+
+#stickyHeader.slide-up {
+    transform: translateY(-100%); /* Deslizar hacia arriba */
+    opacity: 0;
+    visibility: visible; /* Mantener visible durante la animación */
+}
+
+#btn-read-link {
+    text-decoration: none !important;
+    position: relative !important;
+    overflow: hidden !important;
+
+    .btn-read-text {
+        position: relative !important;
+        transition: text-decoration 0.3s ease, color 0.3s ease !important;
+    }
+
+    .bi {
+        display: inline-block !important;
+        transition: transform 0.5s ease !important;
+    }
+
+    &:hover .btn-read-text {
+        text-decoration: underline !important; /* Subrayado del texto */
+        color: #fff !important;
+    }
+
+    &:hover .bi {
+        transform: rotate(360deg) !important; /* Rotación del ícono */
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    img, table, iframe, video {
+        width: 100%;
+    }
 }
