@@ -14,6 +14,10 @@ if(!function_exists('moonshine_role')) {
 
 if(!function_exists('moonshine_role_name')) {
     function moonshine_role_name() {
-        return Illuminate\Support\Facades\Auth::user()->moonshineUserRole->name;
+        if(Illuminate\Support\Facades\Auth::user()) {
+            return Illuminate\Support\Facades\Auth::user()->moonshineUserRole->name;
+        }
+
+        return null;
     }
 }
