@@ -161,22 +161,24 @@ class ArticleResource extends ModelResource
                                 Json::make('Redes sociales', 'network_social')
                                     ->hint('NOTA: Presiona el icono del candado para poder editar los campos')
                                     ->fields([
-                                        Text::make('Title')->locked(),
-                                        Text::make('Value')->locked(),
-                                        Switcher::make('Active'),
+                                        Text::make('Red Social', 'social')->locked(),
+                                        Text::make('Usuario', 'username')->locked(),
+                                        Switcher::make('Mostrar', 'active'),
                                     ])
                                     ->default([
                                         [
-                                            'title' => 'Twitter',
-                                            'value' => '@username',
+                                            'social' => 'Twitter/X',
+                                            'username' => '@username',
                                             'active' => true
                                         ],
                                         [
-                                            'title' => 'LinkedIn',
-                                            'value' => 'username',
+                                            'social' => 'LinkedIn',
+                                            'username' => 'username',
                                             'active' => true
                                         ]
-                                    ]),
+                                    ])
+                                    ->creatable(limit: 4)
+                                    ->removable(),
                                 Switcher::make('Publish', 'is_publish'),
                             ],
                             colSpan: 6,
