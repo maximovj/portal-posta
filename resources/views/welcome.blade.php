@@ -9,9 +9,9 @@
     <div class="card shadow-sm border-0 mb-4" style="border-radius: 10px;">
         
         @if($article->cover) 
-        <img loading="lazy" src="{{ asset("storage/$article->cover ") }}" class="card-img-top" alt="Imagen del artículo" style="height: 420px; object-fit: cover; opacity: 1;">
+        <img loading="lazy" src="{{ asset("storage/$article->cover") }}" class="card-img-top" alt="Imagen del artículo" style="height: 420px; object-fit: cover; opacity: 1;">
         @else
-        <img loading="lazy" src="{{ asset("storage/posts/er4MgUJVMWPiSmpslmoJ8BegWaCO7emq5HCGXG0p.jpg") }}" class="card-img-top" alt="Imagen del artículo" style="height: 420px; object-fit: cover; opacity: 1;">
+        <img loading="lazy" src="{{ asset("storage/posts/default_cover.jpg") }}" class="card-img-top" alt="Imagen del artículo" style="height: 420px; object-fit: cover; opacity: 1;">
         @endif
 
         <div class="card-body">
