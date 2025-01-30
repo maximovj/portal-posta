@@ -62,10 +62,10 @@ Artículo | {{ $article->title ?? ('Artículo No. #' . $article->id) }}
             @foreach ($article->network_social as $social )
             @if($social['active'])
             <li class="g-col-4 ">
-                <span class="me-1"><i class="bi bi-{{ strtolower($social['title']) }}"></i></span>
-                <span class="fw-bold fs-6">{{ $social['title'] }}</span>
+                <span class="me-1"><i class="bi bi-{{ strtolower($social['social']) }}"></i></span>
+                <span class="fw-bold fs-6">{{ $social['social'] }}</span>
                 <span>:</span>
-                <span>{{ $social['value'] }}</span>
+                <span>{{ $social['username'] }}</span>
             </li>
             @endif
             @endforeach

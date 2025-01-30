@@ -167,7 +167,7 @@ class ArticleResource extends ModelResource
                                     ])
                                     ->default([
                                         [
-                                            'social' => 'Twitter/X',
+                                            'social' => 'Twitter',
                                             'username' => '@username',
                                             'active' => true
                                         ],
