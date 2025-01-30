@@ -31,6 +31,13 @@
         
         <footer>
             @yield('content_footer')
+            <div class="bg-dark text-white bg-dark w-100 d-flex text-center justify-content-center align-items-center p-5 rounded-top" style="height: 160px;">
+                <h6 class="d-flex  align-items-center">
+                    <i class="bi bi-github fs-1"></i>
+                    <span class="d-inline ms-2 me-2">Creado por: </span>
+                    <a class="link-success " href="https://github.com/maximovj" target="_blank">Víctor J.</a> 
+                </h6>
+              </div>
         </footer>
     </div>
     <script>
