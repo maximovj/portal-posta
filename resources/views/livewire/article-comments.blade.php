@@ -35,9 +35,18 @@
                 @if ($parentCommentId === $comment->id)
                     <div class="mt-2">
                         <textarea class="form-control" wire:model="newComment" placeholder="Escribe una respuesta..."></textarea>
-                        <button class="btn btn-success mt-2" wire:click="addComment">
-                            <i class="bi bi-send"></i> Responder
+                        
+                        <!-- Botón para responder con el ícono de enviar -->
+                        <button class="btn btn-success mt-2" wire:click="addComment" wire:loading.attr="disabled" wire:loading.class="d-none">
+                            <!-- Icono de enviar usando Bootstrap Icons -->
+                            <i class="bi bi-send"></i> 
+                            Responder
                         </button>
+
+                        <!-- Spinner de carga (Bootstrap 5) -->
+                        <div class="spinner-border text-primary mt-2" role="status" wire:loading wire:target="addComment">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
                     </div>
                 @endif
     
