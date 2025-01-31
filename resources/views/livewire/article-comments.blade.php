@@ -4,9 +4,14 @@
     @auth
         <div class="mb-3">
             <textarea class="form-control" wire:model="newComment" placeholder="Escribe un comentario..."></textarea>
-            <button class="btn btn-primary mt-2" wire:click="addComment">
+            <button class="btn btn-primary mt-2" wire:click="addComment" wire:loading.class="d-none">
                 <i class="bi bi-send"></i> Enviar
             </button>
+            <div wire:loading wire:target="addComment" class="mt-2">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
         </div>
     @endauth
 
@@ -60,11 +65,15 @@
     </div>
 
     {{-- Si hay más comentarios por cargar --}}
-    @if ($comments->count() > 0)
+    @if ($commentsCount < $totalComments)
         <div class="text-center mt-3">
             <button class="btn btn-outline-primary" wire:click="loadMoreComments">
                 Cargar más comentarios
             </button>
+        </div>
+    @else
+        <div class="text-center mt-3">
+            <p>No hay más comentarios.</p>
         </div>
     @endif
 </div>

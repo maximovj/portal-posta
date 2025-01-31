@@ -15,6 +15,7 @@ class ArticleComments extends Component
     public $parentCommentId = null;
     public $comments = [];
     public $commentsCount = 5;  // Número de comentarios iniciales que se cargan
+    public $totalComments = 0;  // Total de comentarios disponibles
 
     protected $rules = [
         'newComment' => 'required|string|max:500',
@@ -23,6 +24,7 @@ class ArticleComments extends Component
     public function mount(Article $article)
     {
         $this->article = $article;
+        $this->totalComments = $this->article->comments()->whereNull('parent_id')->count();  // Contar los comentarios disponibles
         $this->loadComments();
     }
 
