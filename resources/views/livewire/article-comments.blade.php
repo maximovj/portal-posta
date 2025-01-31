@@ -67,8 +67,11 @@
     {{-- Si hay más comentarios por cargar --}}
     @if ($commentsCount < $totalComments)
         <div class="text-center mt-3">
-            <button class="btn btn-outline-primary" wire:click="loadMoreComments">
-                Cargar más comentarios
+            <button class="btn btn-outline-primary" wire:click="loadMoreComments" wire:loading.attr="disabled">
+                <div wire:loading wire:target="loadMoreComments" class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <span wire:loading.remove>Cargar más comentarios</span>
             </button>
         </div>
     @else
