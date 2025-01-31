@@ -10,12 +10,11 @@ use Livewire\WithPagination;
 
 class ArticleComments extends Component
 {
-    use WithPagination;
-
     public $article;
     public $newComment = '';
     public $parentCommentId = null;
-    protected $paginationTheme = 'bootstrap'; // Usa el paginador de Bootstrap
+    public $comments = [];
+    public $commentsCount = 5;  // Número de comentarios iniciales que se cargan
 
     protected $rules = [
         'newComment' => 'required|string|max:500',
@@ -24,6 +23,18 @@ class ArticleComments extends Component
     public function mount(Article $article)
     {
         $this->article = $article;
+        $this->loadComments();
+    }
+
+    public function loadComments()
+    {
+        // Cargar los comentarios según el número de comentarios solicitados
+        $this->comments = $this->article->comments()
+            ->whereNull('parent_id')
+            ->with('replies')
+            ->latest()
+            ->take($this->commentsCount)
+            ->get();
     }
 
     public function addComment()
@@ -38,7 +49,7 @@ class ArticleComments extends Component
         ]);
 
         $this->reset('newComment', 'parentCommentId');
-        $this->resetPage(); // Reinicia la paginación para que el nuevo comentario aparezca en la primera página
+        $this->loadComments(); // Recargar los comentarios después de agregar uno nuevo
     }
 
     public function reply($commentId)
@@ -46,14 +57,17 @@ class ArticleComments extends Component
         $this->parentCommentId = $commentId;
     }
 
+    public function loadMoreComments()
+    {
+        $this->commentsCount += 5;  // Aumentar la cantidad de comentarios cargados
+        $this->loadComments();  // Recargar los comentarios con más resultados
+
+        // Emitir un evento para notificar al frontend que los comentarios fueron cargados
+        $this->dispatch('commentsLoaded');
+    }
+
     public function render()
     {
-        $comments = $this->article->comments()
-            ->whereNull('parent_id')
-            ->with('replies')
-            ->latest()
-            ->paginate(5);
-
-        return view('livewire.article-comments', compact('comments'));
+        return view('livewire.article-comments');
     }
 }

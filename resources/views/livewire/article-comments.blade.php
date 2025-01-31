@@ -10,7 +10,7 @@
         </div>
     @endauth
 
-    <div class="list-group">
+    <div class="list-group" id="comments-list" wire:scroll="loadMoreComments">
         @foreach ($comments as $comment)
             <div class="list-group-item">
                 <strong>{{ $comment->moonshine_user->name }}</strong>
@@ -59,8 +59,12 @@
         @endforeach
     </div>
 
-    {{-- Paginación de Livewire --}}
-    <div class="mt-3">
-        {{ $comments->links() }}
-    </div>
+    {{-- Si hay más comentarios por cargar --}}
+    @if ($comments->count() > 0)
+        <div class="text-center mt-3">
+            <button class="btn btn-outline-primary" wire:click="loadMoreComments">
+                Cargar más comentarios
+            </button>
+        </div>
+    @endif
 </div>

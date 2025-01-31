@@ -80,7 +80,7 @@ Artículo | {{ $article->title ?? ('Artículo No. #' . $article->id) }}
 @endsection
 
 @push('custom_script')
-<script>
+<script>  
     function rateArticle(element, rating) {
         const route = element.getAttribute('data-route');
 
