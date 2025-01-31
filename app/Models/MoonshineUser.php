@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MoonShine\Laravel\Models;
+namespace App\Models;
 
 use App\Models\RatingArticle;
 use Illuminate\Database\Eloquent\Factories\Factory;
