@@ -2,7 +2,7 @@
     <p class="h5">Puntaje: {{ number_format($averageRating, 1) }} ⭐ ({{ $totalVotes }} votos)</p>
 
     @auth
-        @if (in_array(moonshine_role_name(), ['Blogger', 'Guest']))
+        @if (Auth::user()->canVote())
             <div class="d-flex gap-2" wire:target="rate" wire:loading.class="d-none">
                 @for ($i = 1; $i <= 5; $i++)
                     <button wire:click="rate({{ $i }})"
@@ -34,6 +34,13 @@
             <p class="text-danger mt-2">No tienes permisos para calificar este artículo.</p>
         @endif
     @else
-        <p class="mt-2"><a href="{{ route('login') }}" class="text-primary">Inicia sesión</a> para calificar.</p>
+        <p class="mt-2">
+            <span class="bg-light rounded fs-6 p-1">
+                <a href="{{ route('moonshine.login') }}" target="_blank" rel="alternate" referrerpolicy="origin" class="d-inline-block text-primary text-decoration-none">Inicia sesión</a>    
+            </span> 
+            <span>
+                para calificar artículo.
+            </span>
+        </p>
     @endauth
 </div>
