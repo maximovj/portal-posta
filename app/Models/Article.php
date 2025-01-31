@@ -12,6 +12,8 @@ class Article extends Model
     /** @use HasFactory<\Database\Factories\ArticleFactory> */
     use HasFactory;
 
+    // ?? ATTRIBUTES 
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -42,19 +44,28 @@ class Article extends Model
         'is_publish',
     ];
 
+    // ?? RELATIONS
+
     public function moonshine_user() 
     {
         return $this->belongsTo(MoonshineUser::class, 'moonshine_user_id', 'id');
     }
 
-    public function scopeIsPublished(Builder $query)
-    {
-        return $query->where('is_publish', true);
-    }
-
     public function ratings()
     {
         return $this->hasMany(RatingArticle::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'article_id', 'id');
+    }
+
+    // ? Functions
+
+    public function scopeIsPublished(Builder $query)
+    {
+        return $query->where('is_publish', true);
     }
 
     public function averageRating()
