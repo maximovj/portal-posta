@@ -18,7 +18,11 @@
     <div class="list-group" id="comments-list" wire:scroll="loadMoreComments">
         @foreach ($comments as $comment)
             <div class="list-group-item">
-                <strong>{{ $comment->moonshine_user->name }}</strong>
+                
+                <div class="d-flex justify-content-between">
+                    <strong>{{ $comment->moonshine_user->name }}</strong>
+                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                </div>
                 <p>{{ $comment->content }}</p>
 
                 @auth
@@ -40,7 +44,11 @@
                 {{-- Mostrar respuestas anidadas --}}
                 @foreach ($comment->replies as $reply)
                     <div class="ms-4 mt-2 border-start ps-3">
-                        <strong>{{ $reply->moonshine_user->name }}</strong>
+
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ $reply->moonshine_user->name }}</strong>
+                            <small class="text-muted">{{ $reply->created_at->diffForHumans() }}</small>
+                        </div>
                         <p>{{ $reply->content }}</p>
 
                         @auth
