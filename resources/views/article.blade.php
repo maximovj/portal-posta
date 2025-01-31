@@ -73,10 +73,14 @@ Artículo | {{ $article->title ?? ('Artículo No. #' . $article->id) }}
     </div>
     <livewire:article-rating :article="$article" />
 </div>
+
+<div class="shadow-sm p-3 mb-5 bg-body rounded">
+    @livewire('article-comments', ['article' => $article])
+</div>
 @endsection
 
 @push('custom_script')
-<script>
+<script>  
     function rateArticle(element, rating) {
         const route = element.getAttribute('data-route');
 

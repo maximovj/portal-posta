@@ -8,6 +8,7 @@
     <title>@yield('page_title')</title>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     @stack('custom_styles')
+    @livewireStyles
 </head>
 <body>
     <!-- Botón flotante -->
@@ -41,6 +42,8 @@
               </div>
         </footer>
     </div>
+    
+    @livewireScripts
     <script>
         // Obtener el botón
         const backToTopButton = document.getElementById('backToTop');
