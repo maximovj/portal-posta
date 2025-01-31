@@ -55,6 +55,23 @@ class ArticleRating extends Component
         $this->loadRatings();
     }
 
+    public function removeVote()
+    {
+        if (!Auth::check()) {
+            return;
+        }
+
+        $user = Auth::user();
+
+        // Eliminar el voto existente
+        RatingArticle::where('moonshine_user_id', $user->id)
+            ->where('article_id', $this->article->id)
+            ->delete();
+
+        // Recargar la información
+        $this->loadRatings();
+    }
+
     public function render()
     {
         return view('livewire.article-rating');
