@@ -3,13 +3,21 @@
 
     @auth
         @if (in_array(moonshine_role_name(), ['Blogger', 'Guest']))
-            <div class="d-flex gap-2">
+            <!-- Estrellas de calificación (se ocultan cuando se envía el voto) -->
+            <div class="d-flex gap-2" wire:target="rate" wire:loading.class="d-none">
                 @for ($i = 1; $i <= 5; $i++)
                     <button wire:click="rate({{ $i }})"
                         class="btn btn-outline-warning btn-sm {{ $userRating >= $i ? 'text-warning' : 'text-secondary' }}">
                         <i class="bi bi-star-fill"></i>
                     </button>
                 @endfor
+            </div>
+
+            <!-- Spinner de carga (se muestra mientras se envía el voto) -->
+            <div wire:loading wire:target="rate" class="mt-2 text-warning">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div> Enviando tu calificación...
             </div>
         @else
             <p class="text-danger mt-2">No tienes permisos para calificar este artículo.</p>
