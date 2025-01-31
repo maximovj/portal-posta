@@ -30,9 +30,12 @@ class ArticleComments extends Component
 
     public function loadComments()
     {
+        // Contar los comentarios disponibles
+        $comments = $this->article->comments()->whereNull('parent_id');
+        $this->totalComments = $comments->count(); 
+
         // Cargar los comentarios según el número de comentarios solicitados
-        $this->comments = $this->article->comments()
-            ->whereNull('parent_id')
+        $this->comments = $comments
             ->with('replies')
             ->latest()
             ->take($this->commentsCount)
@@ -52,6 +55,22 @@ class ArticleComments extends Component
 
         $this->reset('newComment', 'parentCommentId');
         $this->loadComments(); // Recargar los comentarios después de agregar uno nuevo
+    }
+
+    public function deleteComment($commentId)
+    {
+        // Encuentra el comentario a eliminar
+        $comment = Comment::find($commentId);
+
+        // Verifica si el comentario existe y si el usuario tiene permiso para eliminarlo
+        if ($comment && $comment->moonshine_user_id === Auth::id()) {
+            // Elimina el comentario y sus respuestas, si las tiene
+            $comment->replies()->delete();  // Eliminar respuestas (comentarios hijos)
+            $comment->delete();  // Eliminar el comentario principal
+        }
+
+        // Recargar los comentarios después de eliminar uno
+        $this->loadComments();
     }
 
     public function reply($commentId)

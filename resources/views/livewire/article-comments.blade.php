@@ -1,5 +1,5 @@
 <div>
-    <h2 class="mb-4">Comentarios</h2>
+    <h2 class="mb-4">Comentarios ({{ $totalComments }})</h2>
 
     @auth
     @if(!$parentCommentId)
@@ -37,6 +37,11 @@
             <button class="btn btn-link text-primary" wire:click="reply({{ $comment->id }})">
                 <i class="bi bi-reply"></i> Responder
             </button>
+            @if ($comment->moonshine_user_id === Auth::id())
+                <button  class="btn btn-link text-danger" wire:click="deleteComment({{ $comment->id }})">
+                    <i class="bi bi-trash"></i>    Eliminar
+                </button>
+            @endif
             @endauth
 
             {{-- Formulario para responder --}}
