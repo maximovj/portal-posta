@@ -52,4 +52,14 @@ class Article extends Model
         return $query->where('is_publish', true);
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(RatingArticle::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating') ?? 0; // Si no hay votos, devuelve 0
+    }
+
 }

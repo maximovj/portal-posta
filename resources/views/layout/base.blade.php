@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@yield('page_description')">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page_title')</title>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     @stack('custom_styles')
