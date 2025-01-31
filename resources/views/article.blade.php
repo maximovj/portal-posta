@@ -75,58 +75,7 @@ Artículo | {{ $article->title ?? ('Artículo No. #' . $article->id) }}
 </div>
 
 <div class="shadow-sm p-3 mb-5 bg-body rounded">
-    <h2>Comentarios</h2>
-
-    @auth
-        <form action="{{ route('api.portal.porta.comments.store', $article) }}" method="POST">
-            @csrf
-            <textarea name="content" rows="3" required></textarea>
-            <button type="submit">Comentar</button>
-        </form>
-    @endauth
-    
-    @foreach ($comments as $comment)
-        <div class="border p-2">
-            <p><strong>{{ $comment->moonshine_user->name }}</strong>:</p>
-            <p>{{ $comment->content }}</p>
-    
-            @auth
-                <button onclick="document.getElementById('reply-form-{{ $comment->id }}').style.display='block'">
-                    Responder
-                </button>
-                <form id="reply-form-{{ $comment->id }}" action="{{ route('api.portal.porta.comments.store', $article) }}" method="POST" style="display:none;">
-                    @csrf
-                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                    <textarea name="content" rows="2" required></textarea>
-                    <button type="submit">Enviar</button>
-                </form>
-            @endauth
-    
-            {{-- Mostrar respuestas --}}
-            @foreach ($comment->replies as $reply)
-                <div class="ml-4 border p-2">
-                    <p><strong>{{ $reply->moonshine_user->name }}</strong>:</p>
-                    <p>{{ $reply->content }}</p>
-    
-                    @auth
-                        <button onclick="document.getElementById('reply-form-{{ $reply->id }}').style.display='block'">
-                            Responder
-                        </button>
-                        <form id="reply-form-{{ $reply->id }}" action="{{ route('api.portal.porta.comments.store', $article) }}" method="POST" style="display:none;">
-                            @csrf
-                            <input type="hidden" name="parent_id" value="{{ $reply->id }}">
-                            <textarea name="content" rows="2" required></textarea>
-                            <button type="submit">Enviar</button>
-                        </form>
-                    @endauth
-                </div>
-            @endforeach
-        </div>
-    @endforeach
-
-    <p>
-        {{ $comments->links('pagination::bootstrap-5') }}
-    </p>
+    @livewire('article-comments', ['article' => $article])
 </div>
 @endsection
 
