@@ -33,7 +33,7 @@ use MoonShine\UI\Components\{Breadcrumbs,
 
 use App\MoonShine\Resources\ArticleResource;
 use Illuminate\Support\Facades\Auth;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
 use MoonShine\Laravel\MoonShineAuth;
 use MoonShine\MenuManager\MenuItem;
 

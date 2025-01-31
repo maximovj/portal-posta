@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\Article;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ArticlePolicy
 {

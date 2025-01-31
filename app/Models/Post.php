@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
 
 class Post extends Model
 {

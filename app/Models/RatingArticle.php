@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
 
 class RatingArticle extends Model
 {

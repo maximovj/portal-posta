@@ -29,7 +29,7 @@ use MoonShine\UI\Components\Layout\Grid;
 use Illuminate\Database\Eloquent\Builder;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\UI\Components\Layout\Column;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Laravel\Resources\ModelResource;
 use App\MoonShine\Resources\MoonShineUserResource;
