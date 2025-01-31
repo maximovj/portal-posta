@@ -71,5 +71,27 @@ Artículo | {{ $article->title ?? ('Artículo No. #' . $article->id) }}
             @endforeach
         </ul>
     </div>
+    <livewire:article-rating :article="$article" />
 </div>
 @endsection
+
+@push('custom_script')
+<script>
+    function rateArticle(element, rating) {
+        const route = element.getAttribute('data-route');
+
+        fetch(`${route}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ rating })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('current-rating').innerText = `Puntaje: ${data.rating} ⭐ (${data.rating_count} votos)`;
+        });
+    }
+</script>
+@endpush

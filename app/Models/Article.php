@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
 
 class Article extends Model
 {
@@ -50,6 +50,16 @@ class Article extends Model
     public function scopeIsPublished(Builder $query)
     {
         return $query->where('is_publish', true);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(RatingArticle::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating') ?? 0; // Si no hay votos, devuelve 0
     }
 
 }
