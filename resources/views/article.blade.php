@@ -71,5 +71,44 @@ Artículo | {{ $article->title ?? ('Artículo No. #' . $article->id) }}
             @endforeach
         </ul>
     </div>
+    <p>Puntaje: {{ number_format($article->averageRating(), 1) }} ⭐ ({{ $article->ratings()->count() }} votos)</p>
+    <div class="d-block m-2">
+        @auth
+            @if (in_array(moonshine_role_name(), ['Blogger', 'Guest']))
+        <div>
+            <span onclick="rateArticle(this, 1)" data-route="{{ route('api.portal.porta.articles.rate.store', ['article' => $article]) }}">⭐</span> <br/>
+            <span onclick="rateArticle(this, 2)" data-route="{{ route('api.portal.porta.articles.rate.store', ['article' => $article]) }}">⭐⭐</span> <br/>
+            <span onclick="rateArticle(this, 3)" data-route="{{ route('api.portal.porta.articles.rate.store', ['article' => $article]) }}">⭐⭐⭐</span> <br/>
+            <span onclick="rateArticle(this, 4)" data-route="{{ route('api.portal.porta.articles.rate.store', ['article' => $article]) }}">⭐⭐⭐⭐</span> <br/>
+            <span onclick="rateArticle(this, 5)" data-route="{{ route('api.portal.porta.articles.rate.store', ['article' => $article]) }}">⭐⭐⭐⭐⭐</span> <br/>
+        </div>
+        @else
+                <p>No tienes permisos para calificar este artículo.</p>
+            @endif
+        @else
+            <p><a href="{{ route('login') }}">Inicia sesión</a> para calificar.</p>
+        @endauth
+    </div>
 </div>
 @endsection
+
+@push('custom_script')
+<script>
+    function rateArticle(element, rating) {
+        const route = element.getAttribute('data-route');
+
+        fetch(`${route}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ rating })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('current-rating').innerText = `Puntaje: ${data.rating} ⭐ (${data.rating_count} votos)`;
+        });
+    }
+</script>
+@endpush
