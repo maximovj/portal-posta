@@ -50,7 +50,10 @@
                             'resourceUri' => 'article-resource',
                             'pageUri' => 'index-page',
                         ]) }}">Administrar artículos</a></li>
-                        <li><a class="dropdown-item" href="#">Administrar comentarios</a></li>
+                        <li><a class="dropdown-item" target="_blank" rel="alternate" referrerpolicy="origin" href="{{ route('moonshine.resource.page', [
+                            'resourceUri' => 'comment-resource',
+                            'pageUri' => 'index-page',
+                        ]) }}">Administrar comentarios</a></li>
                         @endif
                     </ul>
                     @endunless

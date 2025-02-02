@@ -33,9 +33,9 @@ return new class extends Migration
             ->onUpdate('cascade'); // Para respuestas
 
             $table->string('title')->nullable()->default('na');
-            $table->string('tags')->nullable();
+            $table->string('tags')->nullable()->default('nuevo');
             $table->text('content')->nullable();
-            $table->boolean('is_active')->nullable()->default(false);
+            $table->boolean('is_publish')->nullable()->default(false);
             
             $table->timestamps();
         });
