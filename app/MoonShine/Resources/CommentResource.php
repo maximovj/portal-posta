@@ -83,8 +83,7 @@ class CommentResource extends ModelResource
                 ->sortable()
                 ->required()    
                 ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', auth()->id()))
-                ->withImage('cover', config('moonshine.disk', 'public'), 'posts')
-                ->disabled(),
+                ->withImage('cover', config('moonshine.disk', 'public'), 'articles'),
             Text::make('Título del comentario', 'title')
                 ->sortable()
                 ->required(),
@@ -146,8 +145,7 @@ class CommentResource extends ModelResource
                 ->sortable()
                 ->required()    
                 ->valuesQuery(fn(Builder $query, Field $field) => $query->where('id', auth()->id()))
-                ->withImage('cover', config('moonshine.disk', 'public'), 'articles')
-                ->disabled(),
+                ->withImage('cover', config('moonshine.disk', 'public'), 'articles'),
             Text::make('Título del comentario', 'title')
                 ->sortable()
                 ->required(),
@@ -170,7 +168,7 @@ class CommentResource extends ModelResource
                 'article',
                 fn($item) => "$item->title | $item->author",  
                 resource: ArticleResource::class)
-                ->withImage('cover', config('moonshine.disk', 'public'), 'posts'),
+                ->withImage('cover', config('moonshine.disk', 'public'), 'articles'),
             Text::make('Titulo', 'title'),
             Text::make('Etiquetas', 'tags')
                 ->tags(5),
