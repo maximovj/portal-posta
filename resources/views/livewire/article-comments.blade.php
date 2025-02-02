@@ -28,10 +28,19 @@
         <div class="list-group-item">
             {{-- Mostrar comentario --}}
             <div class="d-flex justify-content-between">
-                <strong>{{ $comment->moonshine_user->name }}</strong>
+                <p>
+                    <strong>{{ $comment->moonshine_user->name }}</strong>
+                    <span class="text-muted">&nbsp;|&nbsp;{{ $comment->title }}</span>
+                </p>
                 <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
             </div>
             <p>{!! $comment->content !!}</p>
+
+            <div>
+                @foreach (explode(',', $comment->tags) as $tag)
+                <span class="badge bg-secondary"><i class="bi bi-tag"></i>&nbsp;{{ $tag }}</span>
+                @endforeach
+            </div>
 
             @auth
             <button class="btn btn-link text-primary" wire:click="reply({{ $comment->id }})">
@@ -74,7 +83,9 @@
             @if ($comment->replies->count() > 0)
             <div class="ms-4 mt-2">
                 @foreach ($comment->replies as $reply)
+                @if($reply->is_publish)
                 @include('partials.articles_comment', ['comment' => $reply])
+                @endif
                 @endforeach
             </div>
             @endif

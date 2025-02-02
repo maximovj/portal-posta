@@ -24,19 +24,20 @@ class ArticleComments extends Component
     public function mount(Article $article)
     {
         $this->article = $article;
-        $this->totalComments = $this->article->comments()->whereNull('parent_id')->count();  // Contar los comentarios disponibles
         $this->loadComments();
     }
 
     public function loadComments()
     {
         // Contar los comentarios disponibles
-        $comments = $this->article->comments()->whereNull('parent_id');
+        $comments = $this->article->comments()->whereNull('parent_id'); // Solo comentarios principales
         $this->totalComments = $comments->count(); 
 
         // Cargar los comentarios según el número de comentarios solicitados
         $this->comments = $comments
-            ->with('replies')
+            ->with(['replies' => function ($query) {
+                $query->isPublished()->whereNotNull('parent_id'); // Solo respuestas publicadas
+            }])
             ->latest()
             ->take($this->commentsCount)
             ->get();
@@ -51,6 +52,9 @@ class ArticleComments extends Component
             'moonshine_user_id' => Auth::id(),
             'content' => $this->newComment,
             'parent_id' => $this->parentCommentId,
+            'title' => $this->parentCommentId ? ('Este es una respuesta para @' . $this->article->moonshine_user->name): 'Abro un nuevo hilo',
+            'tags' => $this->parentCommentId ? 'respuesta'.(',de,'.moonshine_user()->name).(',para,'.$this->article->moonshine_user->name): 'nuevo,hilo',
+            'is_publish' => true,
         ]);
 
         $this->reset('newComment', 'parentCommentId');
