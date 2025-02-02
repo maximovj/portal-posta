@@ -19,7 +19,7 @@ class Comment extends Model
         'title',
         'tags',
         'content',
-        'is_active',
+        'is_publish',
     ];
 
     // ?? RELATIONS

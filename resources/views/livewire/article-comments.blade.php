@@ -31,16 +31,23 @@
                 <strong>{{ $comment->moonshine_user->name }}</strong>
                 <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
             </div>
-            <p>{{ $comment->content }}</p>
+            <p>{!! $comment->content !!}</p>
 
             @auth
             <button class="btn btn-link text-primary" wire:click="reply({{ $comment->id }})">
                 <i class="bi bi-reply"></i> Responder
             </button>
             @if ($comment->moonshine_user_id === Auth::id())
-                <button  class="btn btn-link text-danger" wire:click="deleteComment({{ $comment->id }})">
-                    <i class="bi bi-trash"></i>    Eliminar
-                </button>
+            <a role="button" class="btn btn-link text-warning" target="_blank" rel="alternate" referrerpolicy="origin" href="{{ route('moonshine.resource.page', [
+                    'resourceUri' => 'comment-resource',
+                    'pageUri' => 'form-page',
+                    'resourceItem' => $comment->id,
+                ]) }}">
+                <i class="bi bi-pencil"></i>&nbsp;Editar
+            </a>
+            <button class="btn btn-link text-danger" wire:click="deleteComment({{ $comment->id }})">
+                <i class="bi bi-trash"></i>&nbsp;Eliminar
+            </button>
             @endif
             @endauth
 
