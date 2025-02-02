@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\MoonshineUser;
 use MoonShine\Laravel\MoonShineAuth;
 use MoonShine\MenuManager\MenuItem;
+use App\MoonShine\Resources\CommentResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -54,13 +55,14 @@ final class MoonShineLayout extends AppLayout
             if (moonshine_role_name() === 'Admin') {
                 return [
                     ...parent::menu(),
-                ];
+        ];
             }
 
             // Si el usuario tiene el rol de 'Blogger', mostrar solo el menú de 'Artículos'
             if (moonshine_role_name() === 'Blogger') {
                 return [
                     MenuItem::make('Artículos', ArticleResource::class),
+                    MenuItem::make('Comentarios', CommentResource::class),
                 ];
             }
         }
