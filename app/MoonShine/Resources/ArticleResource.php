@@ -99,7 +99,7 @@ class ArticleResource extends ModelResource
                             Column::make([
                                 Image::make('Portada','cover')
                                     ->disk(config('moonshine.disk', 'public'))
-                                    ->dir('posts')
+                                    ->dir('articles')
                                     ->allowedExtensions(['jpg', 'png', 'jpeg']),
                                 Text::make('Titulo', 'title')
                                     ->placeholder('Escribe el titulo del artículo')
