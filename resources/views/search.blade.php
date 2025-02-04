@@ -17,7 +17,7 @@
         
         <div class="d-flex flex-wrap">
             @foreach (explode(',', $article->tags) as $tag)
-                <span class="badge bg-primary me-2 mb-2"><i class="bi bi-tag"></i>&nbsp;{{ $tag }}</span>
+                <span class="badge bg-secondary me-2 mb-2"><i class="bi bi-tag"></i>&nbsp;{{ $tag }}</span>
             @endforeach
         </div>
 
