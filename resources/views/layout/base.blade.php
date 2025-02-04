@@ -50,19 +50,28 @@
 
         // Mostrar el botón cuando el usuario se desplaza hacia abajo
         window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) { // Si ha bajado más de 300px
-            backToTopButton.style.display = 'block';
-        } else {
-            backToTopButton.style.display = 'none';
-        }
+            if (window.scrollY > 300) { // Si ha bajado más de 300px
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
         });
 
         // Volver al inicio al hacer clic en el botón
         backToTopButton.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // Animación suave
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Animación suave
+            });
         });
+
+        // Barra de búsqueda
+        document.getElementById('search-input-portal-posta')
+        .addEventListener('keydown', function(event) {
+            if(event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('search-form-portal-posta').submit();
+            }
         });
 
         document.addEventListener('DOMContentLoaded', () => {

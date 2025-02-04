@@ -16,8 +16,10 @@
                     <a class="nav-link" href="#">Artículos</a>
                 </li>
             </ul>
-            <form class="d-flex ms-auto">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+            <form class="d-flex ms-auto" method="GET" action="/search" id="search-form-portal-posta">
+                <input class="form-control me-2" name="q" type="search" placeholder="Buscar" aria-label="Search" 
+                id="search-input-portal-posta" value="{{ request('q') }}" />
+                <input class="form-control me-2" name="type" type="hidden" value="articles" />
                 <button class="btn btn-outline-light" type="submit">Buscar</button>
             </form>
             <ul class="navbar-nav ms-3">
