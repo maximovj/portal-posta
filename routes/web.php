@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Article;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\CommentController;
@@ -18,6 +20,13 @@ Route::get('/article/{article}', function (Article $article) {
     ]);
 })->name('portal.posta.article');
 
+Route::get('/search', function (Request $request) {
+    $query_slug = Str::slug($request->get('q'));
+    $type = $request->get('type');
+    return view('search', [
+        'articles' => Article::selectDetails()->isPublished()->likeSlug($query_slug)->latest('updated_at')->paginate(15),
+    ]);
+});
 
 $authEnabled = moonshineConfig()->isAuthEnabled();
 $authMiddleware = moonshineConfig()->getAuthMiddleware();

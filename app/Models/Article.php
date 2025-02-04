@@ -61,12 +61,24 @@ class Article extends Model
         return $this->hasMany(Comment::class, 'article_id', 'id');
     }
 
-    // ? Functions
+    // ? Scope
 
     public function scopeIsPublished(Builder $query)
     {
         return $query->where('is_publish', true);
     }
+
+    public function scopeSelectDetails(Builder $query)
+    {
+        return $query->select(['id', 'cover', 'author', 'profession', 'title', 'subtitle', 'slug', 'summary', 'tags', 'published_at']);
+    }
+
+    public function scopeLikeSlug(Builder $query, String $query_slug)
+    {
+        return $query->where('slug', 'like', "%$query_slug%");
+    }
+
+    // ? Functions
 
     public function averageRating()
     {
